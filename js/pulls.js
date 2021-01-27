@@ -116,7 +116,11 @@ exports.pulls = [
 			{
 				name: `Spoiled Milk`,
 				type: `Item`
-			}
+			},
+			{
+				name: `Literal Piece of Shit`,
+				type: `Item`
+			},
 		]
 	}
 ]

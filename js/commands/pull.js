@@ -11,7 +11,7 @@ module.exports = {
 		let player = new User(user),
 			numberOfPulls
 
-		new Promise((resolve, reject) => { 
+		new Promise((resolve, reject) => {
 			player.getStoredData(resolve, reject) 
 		})
 			.then(_ => {
@@ -19,7 +19,7 @@ module.exports = {
 				player.userData.pullsThisCycle = numberOfPulls
 
 				return new Promise((resolve, reject) => { 
-					player.saveDataToStorage(resolve, reject) 
+					player.saveDataToStorage(resolve, reject)
 				})
 			})
 			.then(_ => {
