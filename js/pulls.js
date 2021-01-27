@@ -1,116 +1,121 @@
 exports.pulls = [
 	{
 		name: `legendary`,
+		color: `#ffc300`,
 		minWeight: 99,
 		stars: 5,
 		rewards: [
 			{
 				name: `Akko`,
-				type: `character`
+				type: `Character`
 			},
 			{
 				name: `Zero Two`,
-				type: `character`
+				type: `Character`
 			},
 			{
 				name: `Shiro`,
-				type: `character`
+				type: `Character`
 			},
 			{
 				name: `Megumin`,
-				type: `character`
+				type: `Character`
 			}
 		]
 	},
 	{
 		name: `epic`,
+		color: `#9000ff`,
 		minWeight: 96,
 		stars: 4,
 		rewards: [
 			{
 				name: `Fischl`,
-				type: `character`
+				type: `Character`
 			},
 			{
 				name: `Belle Delphine`,
-				type: `character`
+				type: `Character`
 			},
 			{
 				name: `Usada Pekora`,
-				type: `character`
+				type: `Character`
 			},
 			{
 				name: `Beatrice`,
-				type: `character`
+				type: `Character`
 			}
 		]
 	},
 	{
 		name: `rare`,
+		color: `#0099ff`,
 		minWeight: 83,
 		stars: 3,
 		rewards: [
 			{
 				name: `Rusty Sword`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Picaxe`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Blunt Axe`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Frying Pan`,
-				type: `item`
+				type: `Item`
 			}
 		]
 	},
 	{
 		name: `uncommon`,
+		color: `#54b768`,
 		minWeight: 75,
 		stars: 2,
 		rewards: [
 			{
 				name: `Pair of Shoes`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Fork`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Spoon`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Slice of Bread`,
-				type: `item`
+				type: `Item`
 			}
 		]
 	},
 	{
 		name: `common`,
+		color: `#888888`,
 		minWeight: 0,
 		stars: 1,
 		rewards: [
 			{
 				name: `Dirty Socks`,
-				type: `item`
+				type: `Item`
 			},
 			{
 				name: `Broken Toothbrush`,
-				type: `item`
+				type: `Item`
 			},
 			{
-				name: `Slice of pizza someone stepped on`,
-				type: `item`
+				name: `Used Condom`,
+				type: `Item`
 			},
 			{
 				name: `Spoiled Milk`,
-				type: `item`
+				type: `Item`
 			}
 		]
 	}
