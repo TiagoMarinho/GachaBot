@@ -1,43 +1,66 @@
 const { pulls }  = require(`../pulls.js`)
 const { Utils }  = require(`../utils.js`)
-const fs = require('fs');
+const User  = require(`../user.js`)
+const Discord = require('discord.js');
+
 module.exports = {
-	name: `gacha`,
+	name: `pull`,
 	description: `pull a random item or character from pulls.js`,
-	execute: user => {
+	execute: (user, channel) => {
 
-		fs.readFile('./userdata/userdata.txt', 'utf8', function (err, data) {
-			if (err) {
-				return console.log(err);
+		let player = new User(user),
+			numberOfPulls
+
+		new Promise((resolve, reject) => { 
+			player.getStoredData(resolve, reject) 
+		})
+			.then(_ => {
+				numberOfPulls = player.userData.pullsThisCycle + 1 || 1
+				player.userData.pullsThisCycle = numberOfPulls
+
+				return new Promise((resolve, reject) => { 
+					player.saveDataToStorage(resolve, reject) 
+				})
+			})
+			.then(_ => {
+				roll()
+			})
+
+		const roll = _ => {
+			const luck = Utils.getRandomFloat(0, 100)
+			
+			let result,
+				stars,
+				type,
+				color
+
+			for (const rarity of pulls) {
+				if (luck > rarity.minWeight) {
+					item = Utils.getRandomItem(rarity.rewards)
+					stars = rarity.stars
+					type = item.type
+					color = rarity.color
+					break
+				}
 			}
-			const userData = JSON.parse(data)
-			userData[user.id] = userData[user.id] || {
-				pullsInCycle: 0
+
+			let starsString = ``
+			for (let i = 0; i < stars; ++i) {
+				starsString += `:star:`
 			}
-			userPullsLastCycle = ++userData[user.id].pullsInCycle
 
-			fs.writeFile('./userdata/userdata.txt', JSON.stringify(userData), 'utf8', err => {
-				if (err) return console.log(err);
-				console.log(JSON.stringify(userData))
-			});
-		});
+			const embedMessage = new Discord.MessageEmbed()
+				.setColor(color)
+				.setTitle(item.name)
+				.setAuthor(`${user.username}, you just got:`, user.avatarURL(), '')
+				.addFields(
+					{ name: `Type`, value: `${type}`, inline: true },
+					{ name: `Rarity`, value: `${starsString}`, inline: true },
+				)
+				.setFooter(`luck = ${Math.floor(luck)}, pulls = ${numberOfPulls}`)
 
-		const luck = Utils.getRandomFloat(0, 100)
-		
-		let result,
-			stars,
-			type
-
-		for (const rarity of pulls) {
-			if (luck > rarity.minWeight) {
-				item = Utils.getRandomItem(rarity.rewards)
-				stars = rarity.stars
-				type = item.type
-				break
-			}
+			channel.send(embedMessage)
 		}
-
-		return `You just pulled ${item.name} (**${stars}-star ${type}**)! Luck = ${Math.floor(luck)}`
 
 	}
 }
