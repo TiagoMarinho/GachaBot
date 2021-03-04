@@ -14,14 +14,14 @@ module.exports = class Main {
 		this.client.login(this.config.token)
 
 		this.client.once("ready", _ => {
-			commandsByName = this._getCommandsFromFiles()
+			commandsByName = this.getCommandsFromFiles()
 			console.log("Ready!")
 		})
 		this.client.on("message", message => {
 			this.respondToCommands(message, commandsByName)
 		})
 	}
-	_getCommandsFromFiles () {
+	getCommandsFromFiles () {
 		let commandsByName = {}
 		const commandFiles = fs.readdirSync(path.resolve(__dirname, 'commands')).filter(file => file.endsWith('.js'))
 		for (const file of commandFiles) {
