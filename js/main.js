@@ -1,14 +1,25 @@
 const fs = require('fs')
 const path = require('path');
+const Discord = require('discord.js')
 
 module.exports = class Main {
 	constructor (config) {
 		this.config = config
+		this.client = new Discord.Client()
 		this.users = []
-		this.commandsByName = {}
 	}
 	run () {
-		this.commandsByName = this._getCommandsFromFiles()
+		let commandsByName = {}
+
+		this.client.login(this.config.token)
+
+		this.client.once("ready", _ => {
+			commandsByName = this._getCommandsFromFiles()
+			console.log("Ready!")
+		})
+		this.client.on("message", message => {
+			this.respondToCommands(message, commandsByName)
+		})
 	}
 	_getCommandsFromFiles () {
 		let commandsByName = {}
@@ -19,7 +30,7 @@ module.exports = class Main {
 		}
 		return commandsByName
 	}
-	commandResponseHook (message) {
+	respondToCommands (message, commandsByName) {
 		const prefix = this.config.prefix
 		if (!message.content.startsWith(prefix) || message.author.bot) 
 			return
@@ -27,11 +38,11 @@ module.exports = class Main {
 		const args = message.content.slice(prefix.length).trim().split(/ +/)
 		const command = args.shift().toLowerCase()
 
-		if (typeof this.commandsByName[command] === `undefined`) 
+		if (typeof commandsByName[command] === `undefined`) 
 			return
 
 		try {
-			this.commandsByName[command].execute();
+			commandsByName[command].execute(message);
 		} catch (error) {
 			console.error(error)
 			message.reply('there was an error trying to execute that command!')
