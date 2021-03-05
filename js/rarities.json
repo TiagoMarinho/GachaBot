@@ -1,0 +1,32 @@
+[
+	{
+		"name": "legendary",
+		"color": "#ffc300",
+		"minWeight": 0.99,
+		"stars": 5
+	},
+	{
+		"name": "epic",
+		"color": "#9000ff",
+		"minWeight": 0.96,
+		"stars": 4
+	},
+	{
+		"name": "rare",
+		"color": "#0099ff",
+		"minWeight": 0.83,
+		"stars": 3
+	},
+	{
+		"name": "uncommon",
+		"color": "#54b768",
+		"minWeight": 0.75,
+		"stars": 2
+	},
+	{
+		"name": "common",
+		"color": "#888888",
+		"minWeight": 0.0,
+		"stars": 1
+	}
+]
