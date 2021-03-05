@@ -13,7 +13,7 @@ class Pull {
 			channel = message.channel
 
 		const gacha = new Gacha(`./wishlist.json`)
-		const [reward, rarity, luck] = gacha.pull()
+		const [reward, rarity, debug] = gacha.pull()
 
 		console.log(`${user.username} pulled a ${rarity.stars}-star item!`)
 
@@ -26,7 +26,7 @@ class Pull {
 					{ name: `Rarity`, value: `:star:`.repeat(rarity.stars), inline: true },
 					{ name: `duplicate`, value: `0` },
 				)
-				.setFooter(`luck = ${Math.floor(luck * 100) / 100}; pulls = nPulls; isCharacter = isCharacter`)
+				.setFooter(`luck = ${Math.floor(debug.luck * 100) / 100}; pulls = nPulls; isCharacter = ${debug.isCharacter}`)
 
 		channel.send(embedMessage)
 	}

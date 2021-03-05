@@ -10,9 +10,9 @@ module.exports = class Gacha {
 		const luck = Utils.getRandomFloat(0, 1),
 			isCharacter = Utils.getRandomBool(),
 			rarity = this.getPullRarity(luck),
-			reward = this.getPullReward(rarity)
+			reward = this.getPullReward(rarity, isCharacter)
 
-		return [reward, rarity, luck]
+		return [reward, rarity, {luck: luck, isCharacter: isCharacter}]
 	}
 	getPullRarity (luck) {
 		for (const rarityName in this.wishList) {
