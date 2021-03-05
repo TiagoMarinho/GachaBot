@@ -1,5 +1,5 @@
 const { wishes }  = require(`../wishes.js`)
-const { Utils }  = require(`../utils.js`)
+const Utils  = require(`../utils.js`)
 const User  = require(`../user.js`)
 const Discord = require('discord.js')
 

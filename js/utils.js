@@ -1,7 +1,4 @@
-class Utils {
-	constructor () {
-
-	}
+module.exports = class Utils {
 	static getRandomFloat(min, max) {
 		return Math.random() * (max - min) + min;
 	}
@@ -18,4 +15,3 @@ class Utils {
 		return (valueA * weightA + valueB * weightB) / (weightA + weightB)
 	}
 }
-exports.Utils = Utils
