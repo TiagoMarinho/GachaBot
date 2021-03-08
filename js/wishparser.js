@@ -29,7 +29,7 @@ module.exports = class WishParser {
 	}
 	assignRewardsToRarities (rarities, rewards) {
 		for (const reward of rewards) {
-			const rarityIndex = rarities.length - reward.stars,
+			const rarityIndex = reward.stars - 1,
 				rewardType = reward instanceof Character ? "characters" : "items"
 
 			rarities[rarityIndex].rewards[rewardType].push(reward)
