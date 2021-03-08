@@ -2,11 +2,12 @@ const Utils = require(`../utils.js`)
 const User = require(`../user.js`)
 const Gacha = require(`../gacha.js`)
 const Discord = require('discord.js')
+const config = require(`../../config.json`)
 
-class Pull {
+module.exports = new class Pull {
 	constructor () {
 		this.name = `pull`
-		this.description = `pulls a random item or character from wishes.js`
+		this.description = `Pulls a random item or character from the pool`
 
 		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`)
 	}
@@ -24,13 +25,15 @@ class Pull {
 				.setAuthor(`${user.username}, you just got:`, user.avatarURL(), ``)
 				.setDescription(reward.series || "")
 				.addFields(
-					{ name: `Type`, value: `Item/Character`, inline: true },
+					{ name: `Type`, value: reward.constructor.name, inline: true },
 					{ name: `Rarity`, value: `:star:`.repeat(rarity.stars), inline: true },
-					{ name: reward.duplicateString, value: `0` },
+					{ name: reward.duplicateString, value: message.client.emojis.cache.find(emoji => emoji.name === `C0`) },
 				)
-				.setFooter(`luck = ${Math.floor(debug.luck * 100) / 100}; pulls = missing; isCharacter = ${debug.isCharacter}`)
+				.setImage(`https://i.imgur.com/fndBsb9.png`) // placeholder
+
+		if (config.debug)
+			embedMessage.setFooter(`luck = ${debug.luck.toFixed(3)};\nisCharacter = ${debug.isCharacter};`)
 
 		channel.send(embedMessage)
 	}
 }
-module.exports = new Pull()
