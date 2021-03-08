@@ -21,12 +21,12 @@ module.exports = new class Daily {
 			normalizedSeed = (seed - seedMin) / (seedMax - seedMin),
 			rarityIndex = Math.floor(normalizedSeed / 0.2),
 			rarity = rarities[rarityIndex],
-			emojiMessage = `\n${`${rarity.emoji} `.repeat(rarity.stars)}`
+			emojiMessage = `${rarity.emoji} `.repeat(rarity.stars)
 
 		const embedMessage = new Discord.MessageEmbed()
 				.setColor(rarity.color)
 				.setAuthor(`Daily Reward:`)
-				.setTitle(`**$${reward}**${emojiMessage}`)
+				.setTitle(`**$${reward}**\n${emojiMessage}`)
 			
 		if (config.debug)
 			embedMessage.setFooter(`isJackpot = ${isJackpot}\nseed = ${Math.floor(seed * 1000) / 1000}\nrarity = ${rarity.name}`)
