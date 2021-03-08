@@ -1,66 +1,39 @@
-const { pulls }  = require(`../pulls.js`)
-const { Utils }  = require(`../utils.js`)
-const User  = require(`../user.js`)
-const Discord = require('discord.js');
+const Utils = require(`../utils.js`)
+const User = require(`../user.js`)
+const Gacha = require(`../gacha.js`)
+const Discord = require('discord.js')
+const config = require(`../../config.json`)
 
-module.exports = {
-	name: `pull`,
-	description: `pull a random item or character from pulls.js`,
-	execute: (user, channel) => {
+module.exports = new class Pull {
+	constructor () {
+		this.name = `pull`
+		this.description = `Pulls a random item or character from the pool`
 
-		let player = new User(user),
-			numberOfPulls
+		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`)
+	}
+	execute (message) { // don't do gacha logic inside of here, this is just for composing the final message!
+		const user = message.author,
+			channel = message.channel
 
-		new Promise((resolve, reject) => {
-			player.getStoredData(resolve, reject) 
-		})
-			.then(_ => {
-				numberOfPulls = player.userData.pullsThisCycle + 1 || 1
-				player.userData.pullsThisCycle = numberOfPulls
+		const [reward, rarity, debug] = this.gacha.pull()
 
-				return new Promise((resolve, reject) => { 
-					player.saveDataToStorage(resolve, reject)
-				})
-			})
-			.then(_ => {
-				roll()
-			})
+		console.log(`${user.username} pulled a ${rarity.stars}-star item!`)
 
-		const roll = _ => {
-			const luck = Utils.getRandomFloat(0, 100)
-			
-			let result,
-				stars,
-				type,
-				color
-
-			for (const rarity of pulls) {
-				if (luck > rarity.minWeight) {
-					item = Utils.getRandomItem(rarity.rewards)
-					stars = rarity.stars
-					type = item.type
-					color = rarity.color
-					break
-				}
-			}
-
-			let starsString = ``
-			for (let i = 0; i < stars; ++i) {
-				starsString += `:star:`
-			}
-
-			const embedMessage = new Discord.MessageEmbed()
-				.setColor(color)
-				.setTitle(item.name)
-				.setAuthor(`${user.username}, you just got:`, user.avatarURL(), '')
+		const embedMessage = new Discord.MessageEmbed()
+				.setColor(rarity.color)
+				.setTitle(reward.name)
+				.setAuthor(`${user.username}, you just got:`, user.avatarURL(), ``)
+				.setDescription(reward.series || "")
 				.addFields(
-					{ name: `Type`, value: `${type}`, inline: true },
-					{ name: `Rarity`, value: `${starsString}`, inline: true },
+					{ name: `Type`, value: reward.constructor.name, inline: true },
+					{ name: `Rarity`, value: `:star:`.repeat(rarity.stars), inline: true },
+					{ name: reward.duplicateString, value: message.client.emojis.cache.find(emoji => emoji.name === `C0`) },
 				)
-				.setFooter(`luck = ${Math.floor(luck)}, pulls = ${numberOfPulls}`)
+				.setImage(`https://i.imgur.com/fndBsb9.png`) // placeholder
 
-			channel.send(embedMessage)
-		}
+		if (config.debug)
+			embedMessage.setFooter(`luck = ${debug.luck.toFixed(3)};\nisCharacter = ${debug.isCharacter};`)
 
+		channel.send(embedMessage)
 	}
 }

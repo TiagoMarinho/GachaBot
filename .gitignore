@@ -2,3 +2,5 @@ node_modules
 .env
 config.json
 userdata
+js/bkp/*
+main idea.txt

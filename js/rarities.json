@@ -1,0 +1,37 @@
+[
+	{
+		"name": "common",
+		"color": "#888888",
+		"minWeight": 0,
+		"stars": 1,
+		"emoji": ":dollar:"
+	},
+	{
+		"name": "uncommon",
+		"color": "#54b768",
+		"minWeight": 0.75,
+		"stars": 2,
+		"emoji": ":dollar:"
+	},
+	{
+		"name": "rare",
+		"color": "#0099ff",
+		"minWeight": 0.83,
+		"stars": 3,
+		"emoji": ":euro:"
+	},
+	{
+		"name": "epic",
+		"color": "#9000ff",
+		"minWeight": 0.96,
+		"stars": 4,
+		"emoji": ":pound:"
+	},
+	{
+		"name": "legendary",
+		"color": "#ffac33",
+		"minWeight": 0.99,
+		"stars": 5,
+		"emoji": ":yen:"
+	}
+]
