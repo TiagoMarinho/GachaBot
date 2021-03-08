@@ -16,6 +16,7 @@ module.exports = new class Help {
 		const embedMessage = new Discord.MessageEmbed()
 				.setColor(`#888888`)
 				.setTitle(`Help`)
+				.setFooter(`Developed by tiago#1000`)
 
 		const commandsByName = this.getCommandsFromFiles()
 
