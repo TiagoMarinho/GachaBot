@@ -9,7 +9,7 @@ module.exports = new class Pull {
 		this.name = `pull`
 		this.description = `Pulls a random item or character from the pool`
 
-		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`)
+		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`) // this should be done in main.js I believe, so that !search can access the same object
 	}
 	execute (message, args) { // don't do gacha logic inside of here, this is just for composing the final message!
 		const user = message.author,
