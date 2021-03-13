@@ -9,7 +9,8 @@
 		"name": "Zero Two",
 		"type": "Character",
 		"series": "Darling in the FranXX",
-		"stars": 5
+		"stars": 5,
+		"image": "https://i.imgur.com/ucfhIeO.png"
 	},
 	{
 		"name": "Shiro",
@@ -69,7 +70,7 @@
 		"stars": 3
 	},
 	{
-		"name": "Picaxe",
+		"name": "Pickaxe",
 		"type": "Item",
 		"stars": 3
 	},

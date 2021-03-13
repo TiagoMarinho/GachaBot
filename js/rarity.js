@@ -4,9 +4,15 @@ module.exports = class Rarity {
 		this.color = color
 		this.stars = stars
 		this.minWeight = minWeight
-		this.rewards = {
+		this.rewardsByType = {
 			characters: [], 
 			items: []
 		}
+	}
+	get rewards () {
+		return [
+			...this.rewardsByType.characters, 
+			...this.rewardsByType.items
+		]
 	}
 }

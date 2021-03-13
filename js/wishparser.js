@@ -2,6 +2,12 @@ const Character = require("./character.js")
 const Item = require("./item.js")
 const Rarity = require("./rarity.js")
 
+/*
+ * This class generates a very specific-looking monolithic object
+ * that is probably a missed abstraction.
+ * Work towards abstracting it to its own class is needed.
+ */
+
 module.exports = class WishParser {
 	mapRarities (rawData) {
 		const rarities = rawData.map(rarity => new Rarity(
@@ -22,7 +28,8 @@ module.exports = class WishParser {
 		const rewards = rawData.map(reward => new rewardTypes[reward.type](
 			reward.name,
 			reward.stars,
-			reward.series
+			reward.series,
+			reward.image
 		))
 
 		return rewards
@@ -30,9 +37,11 @@ module.exports = class WishParser {
 	assignRewardsToRarities (rarities, rewards) {
 		for (const reward of rewards) {
 			const rarityIndex = reward.stars - 1,
-				rewardType = reward instanceof Character ? "characters" : "items"
+				rewardType = reward instanceof Character ? "characters" : "items", // this feels wrong
+				rarity = rarities[rarityIndex]
 
-			rarities[rarityIndex].rewards[rewardType].push(reward)
+			rarity.rewards[rewardType].push(reward)
+			reward.rarity = rarity
 		}
 		return rarities
 	}

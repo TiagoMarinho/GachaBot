@@ -11,11 +11,23 @@ module.exports = new class Pull {
 
 		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`)
 	}
-	execute (message) { // don't do gacha logic inside of here, this is just for composing the final message!
+	execute (message, args) { // don't do gacha logic inside of here, this is just for composing the final message!
 		const user = message.author,
 			channel = message.channel
 
-		const [reward, rarity, debug] = this.gacha.pull()
+		let forcedLuck
+		if (typeof args[0] !== `undefined` && config.debug)
+			forcedLuck = parseFloat(args[0])
+		else if (typeof args[0] === `undefined` && !config.debug) // potential bug, is it really intended for the first to be ===?
+			return message.reply("using forced luck with debug mode disabled is not allowed")
+
+		const [reward, rarity, debug] = this.gacha.pull(forcedLuck),
+			stars = rarity.stars,
+			type = reward.constructor.name,
+			//duplicateEmoji = message.client.emojis.cache.find(emoji => emoji.name === `C0`),
+			image = reward.image || `https://i.imgur.com/fndBsb9.png`,
+			luck = debug.luck.toFixed(3),
+			isCharacter = debug.isCharacter
 
 		console.log(`${user.username} pulled a ${rarity.stars}-star item!`)
 
@@ -26,13 +38,13 @@ module.exports = new class Pull {
 				.setDescription(reward.series || "")
 				.addFields(
 					{ name: `Type`, value: reward.constructor.name, inline: true },
-					{ name: `Rarity`, value: `:star:`.repeat(rarity.stars), inline: true },
-					{ name: reward.duplicateString, value: message.client.emojis.cache.find(emoji => emoji.name === `C0`) },
+					{ name: `Rarity`, value: `:star:`.repeat(stars), inline: true },
+					//{ name: reward.duplicateString, value: duplicateEmoji, inline: true },
 				)
-				.setImage(`https://i.imgur.com/fndBsb9.png`) // placeholder
+				.setImage(image) // placeholder
 
 		if (config.debug)
-			embedMessage.setFooter(`luck = ${debug.luck.toFixed(3)};\nisCharacter = ${debug.isCharacter};`)
+			embedMessage.setFooter(`luck = ${luck};\nisCharacter = ${isCharacter};`)
 
 		channel.send(embedMessage)
 	}
