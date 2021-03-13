@@ -20,14 +20,15 @@ module.exports = new class Search {
 
 		let name = ``
 		for (const arg of args) {
-			name += `${arg} `
+			name += `${arg}`
 		}
 
 		const result = this.gacha.getRewardByName(name)
 		if (!result)
-			return message.reply(`${name}returned no results!`)
+			return message.reply(`no results found for "${name}"!`)
 
-		const [reward, rarity] = result,
+		const reward = result,
+			rarity = this.gacha.rarities.find(rarity => rarity.stars === reward.stars), // could be done through index too
 			stars = rarity.stars,
 			type = reward.constructor.name,
 			image = reward.image || `https://i.imgur.com/fndBsb9.png`

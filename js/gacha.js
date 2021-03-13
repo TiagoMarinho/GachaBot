@@ -1,16 +1,19 @@
 const Utils = require(`./utils.js`)
 const WishParser = require(`./wishparser.js`)
+const Character = require(`./character.js`)
+const Item = require(`./item.js`)
 
 module.exports = class Gacha {
 	constructor (raritiesFile, rewardsFile) {
-		this.wishList = this.getWishListFromJSONFile(raritiesFile, rewardsFile).reverse()
+		this.getWishListFromJSONFile(raritiesFile, rewardsFile)
 	}
 	getWishListFromJSONFile (raritiesFile, rewardsFile) {
 		const parser = new WishParser(),
 			raritiesRawData = require(raritiesFile),
 			rewardsRawData = require(rewardsFile)
 
-		return parser.parseWishList(raritiesRawData, rewardsRawData)
+		this.rarities = parser.mapRarities(raritiesRawData).reverse()
+		this.rewards = parser.mapRewards(rewardsRawData)
 	}
 	pull (luck = Utils.getRandomFloat(0, 1)) {
 		const rarity = this.getPullRarity(luck),
@@ -20,25 +23,30 @@ module.exports = class Gacha {
 		return [reward, rarity, {luck: luck, isCharacter: isCharacter}]
 	}
 	getPullRarity (luck) {
-		for (const rarity of this.wishList) {
+		for (const rarity of this.rarities) {
 			if (luck >= rarity.minWeight) {
 				return rarity
 			}
 		}
 	}
 	getPullReward (rarity, isCharacter) {
-		const type = isCharacter ? `characters` : `items`
-		return Utils.getRandomItem(rarity.rewards[type])
+		const possibleRewards = this.rewards.filter(reward => {
+			const isCorrectType = reward instanceof Character === isCharacter,
+				isCorrectRarity = reward.stars === rarity.stars
+			return isCorrectRarity && isCorrectType
+		})
+		return Utils.getRandomItem(possibleRewards)
 	}
-	getRewardByName (name) {
-		for (const rarity of this.wishList) {
-			for (let i = 0; i < 2; ++i) {
-				const type = i === 0 ? "characters" : "items"
-				for (const reward of rarity.rewards[type]) {
-					if (`${reward.name} `.toUpperCase() === name.toUpperCase()) // todo: fix this hack
-						return [reward, rarity]
-				}
-			}
+	getRewardByName (name, caseSensitive = false) {
+		name = (caseSensitive ? name : name.toUpperCase())
+				.split(` `).join(``)
+				
+		for (const reward of this.rewards) {
+			const rewardName = (caseSensitive ? reward.name : reward.name.toUpperCase())
+				.split(` `).join(``)
+
+			if (rewardName === name)
+				return reward
 		}
 		return false
 	}
