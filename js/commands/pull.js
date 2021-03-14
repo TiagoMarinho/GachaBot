@@ -18,7 +18,7 @@ module.exports = new class Pull {
 		let forcedLuck
 		if (typeof args[0] !== `undefined` && config.debug)
 			forcedLuck = parseFloat(args[0])
-		else if (typeof args[0] === `undefined` && !config.debug) // potential bug, is it really intended for the first to be ===?
+		else if (typeof args[0] !== `undefined` && !config.debug)
 			return message.reply("using forced luck with debug mode disabled is not allowed")
 
 		const [reward, rarity, debug] = this.gacha.pull(forcedLuck),
