@@ -23,6 +23,8 @@ module.exports = new class Daily {
 			rarity = rarities[rarityIndex],
 			emojiMessage = `${rarity.emoji} `.repeat(rarity.stars)
 
+		console.log(`${user.username} got $${reward} from the daily reward!`)
+
 		const embedMessage = new Discord.MessageEmbed()
 				.setColor(rarity.color)
 				.setAuthor(`Daily Reward:`)
