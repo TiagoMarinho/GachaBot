@@ -4,7 +4,7 @@ const path = require('path');
 const config = require(`../../config.json`)
 const Discord = require('discord.js')
 
-module.exports = new class Help {
+module.exports = class Help {
 	constructor () {
 		this.name = `help`
 		this.description = `Provides instructions on how to use this bot`

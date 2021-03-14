@@ -4,12 +4,12 @@ const Gacha = require(`../gacha.js`)
 const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
-module.exports = new class Search {
-	constructor () {
+module.exports = class Search {
+	constructor (gacha) {
 		this.name = `search`
 		this.description = `Searches for items or characters from the pool`
 
-		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`)
+		this.gacha = gacha
 	}
 	execute (message, args) {
 		const user = message.author,

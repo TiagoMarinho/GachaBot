@@ -3,7 +3,7 @@ const rarities = require(`../rarities.json`)
 const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
-module.exports = new class DebugMode {
+module.exports = class DebugMode {
 	constructor () {
 		this.name = `debugmode`
 		this.description = `Displays current debug mode`

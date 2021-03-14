@@ -5,15 +5,8 @@ const Item = require(`./item.js`)
 
 module.exports = class Gacha {
 	constructor (raritiesFile, rewardsFile) {
-		this.getWishListFromJSONFile(raritiesFile, rewardsFile)
-	}
-	getWishListFromJSONFile (raritiesFile, rewardsFile) { // does not belong here
-		const parser = new WishParser(),
-			raritiesRawData = require(raritiesFile),
-			rewardsRawData = require(rewardsFile)
-
-		this.rarities = parser.mapRarities(raritiesRawData).reverse()
-		this.rewards = parser.mapRewards(rewardsRawData)
+		this.rewards = []
+		this.rarities = []
 	}
 	pull (luck = Utils.getRandomFloat(0, 1)) {
 		const rarity = this.getPullRarity(luck),

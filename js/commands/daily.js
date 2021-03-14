@@ -3,7 +3,7 @@ const rarities = require(`../rarities.json`)
 const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
-module.exports = new class Daily {
+module.exports = class Daily {
 	constructor () {
 		this.name = `daily`
 		this.description = `Gives a random gold reward`

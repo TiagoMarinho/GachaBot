@@ -4,12 +4,11 @@ const Gacha = require(`../gacha.js`)
 const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
-module.exports = new class Pull {
-	constructor () {
+module.exports = class Pull {
+	constructor (gacha) {
 		this.name = `pull`
 		this.description = `Pulls a random item or character from the pool`
-
-		this.gacha = new Gacha(`./rarities.json`, `./rewards.json`) // this should be done in main.js I believe, so that !search can access the same object
+		this.gacha = gacha
 	}
 	execute (message, args) { // don't do gacha logic inside of here, this is just for composing the final message!
 		const user = message.author,
