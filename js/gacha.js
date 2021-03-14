@@ -7,7 +7,7 @@ module.exports = class Gacha {
 	constructor (raritiesFile, rewardsFile) {
 		this.getWishListFromJSONFile(raritiesFile, rewardsFile)
 	}
-	getWishListFromJSONFile (raritiesFile, rewardsFile) {
+	getWishListFromJSONFile (raritiesFile, rewardsFile) { // does not belong here
 		const parser = new WishParser(),
 			raritiesRawData = require(raritiesFile),
 			rewardsRawData = require(rewardsFile)
