@@ -5,9 +5,9 @@ const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
 module.exports = class Pull {
+	static name = `pull`
+	static description = `Pulls a random item or character from the pool`
 	constructor (gacha) {
-		this.name = `pull`
-		this.description = `Pulls a random item or character from the pool`
 		this.gacha = gacha
 	}
 	execute (message, args) { // don't do gacha logic inside of here, this is just for composing the final message!
@@ -23,7 +23,6 @@ module.exports = class Pull {
 		const [reward, rarity, debug] = this.gacha.pull(forcedLuck),
 			stars = rarity.stars,
 			type = reward.constructor.name,
-			//duplicateEmoji = message.client.emojis.cache.find(emoji => emoji.name === `C0`),
 			image = reward.image || `https://i.imgur.com/fndBsb9.png`,
 			luck = debug.luck.toFixed(3),
 			isCharacter = debug.isCharacter
@@ -38,7 +37,6 @@ module.exports = class Pull {
 				.addFields(
 					{ name: `Type`, value: reward.constructor.name, inline: true },
 					{ name: `Rarity`, value: `:star:`.repeat(stars), inline: true },
-					//{ name: reward.duplicateString, value: duplicateEmoji, inline: true },
 				)
 				.setImage(image) // placeholder
 

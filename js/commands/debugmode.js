@@ -4,9 +4,9 @@ const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
 module.exports = class DebugMode {
+	static name = `debugmode`
+	static description = `Displays current debug mode`
 	constructor () {
-		this.name = `debugmode`
-		this.description = `Displays current debug mode`
 	}
 	execute (message, args) {
 		const user = message.author,

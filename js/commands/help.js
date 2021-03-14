@@ -5,9 +5,9 @@ const config = require(`../../config.json`)
 const Discord = require('discord.js')
 
 module.exports = class Help {
+	static name = `help`
+	static description = `Provides instructions on how to use this bot`
 	constructor () {
-		this.name = `help`
-		this.description = `Provides instructions on how to use this bot`
 	}
 	execute (message) {
 		const user = message.author,

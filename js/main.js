@@ -25,7 +25,7 @@ module.exports = class Main {
 			this.respondToCommands(message, commandsByName)
 		})
 	}
-	buildWishLists (raritiesFile, rewardsFile) {
+	buildWishLists (raritiesFile, rewardsFile) { // unsure if this belongs here
 		const parser = new WishParser(),
 			raritiesRawData = require(raritiesFile),
 			rewardsRawData = require(rewardsFile)
@@ -37,9 +37,8 @@ module.exports = class Main {
 		let commandsByName = {}
 		const commandFiles = fs.readdirSync(path.resolve(__dirname, 'commands')).filter(file => file.endsWith('.js'))
 		for (const file of commandFiles) {
-			const Command = require(`./commands/${file}`),
-				command = new Command(this.gacha)
-			commandsByName[command.name] = command
+			const Command = require(`./commands/${file}`)
+			commandsByName[Command.name] = new Command(this.gacha)
 		}
 		return commandsByName
 	}

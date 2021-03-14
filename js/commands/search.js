@@ -5,10 +5,9 @@ const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
 module.exports = class Search {
+	static name = `search`
+	static description = `Searches for items or characters from the pool`
 	constructor (gacha) {
-		this.name = `search`
-		this.description = `Searches for items or characters from the pool`
-
 		this.gacha = gacha
 	}
 	execute (message, args) {

@@ -4,9 +4,9 @@ const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
 module.exports = class Daily {
+	static name = `daily`
+	static description = `Gives a random gold reward`
 	constructor () {
-		this.name = `daily`
-		this.description = `Gives a random gold reward`
 	}
 	execute (message) {
 		const user = message.author,
