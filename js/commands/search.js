@@ -23,6 +23,9 @@ module.exports = class Search {
 		}
 
 		const result = this.gacha.getRewardByName(name)
+
+		console.log(`${user.username} searched for "${name}"`)
+
 		if (!result)
 			return message.reply(`no results found for "${name}"!`)
 
@@ -30,9 +33,8 @@ module.exports = class Search {
 			rarity = this.gacha.rarities.find(rarity => rarity.stars === reward.stars), // could be done through index too
 			stars = rarity.stars,
 			type = reward.constructor.name,
+			worth = reward.worth,
 			image = reward.image || `https://i.imgur.com/fndBsb9.png`
-
-		console.log(`${user.username} searched for ${reward.name}`)
 
 		const embedMessage = new Discord.MessageEmbed()
 				.setColor(rarity.color)
@@ -40,10 +42,11 @@ module.exports = class Search {
 				.setAuthor(`${user.username}, here's the result:`, user.avatarURL(), ``)
 				.setDescription(reward.series || "")
 				.addFields(
-					{ name: `Type`, value: reward.constructor.name, inline: true },
-					{ name: `Rarity`, value: `:star:`.repeat(stars), inline: true }
+					{name: `Value`, value: `$${worth}`, inline: true},
+					{name: `Type`, value: reward.constructor.name, inline: true},
+					{name: `Rarity`, value: `:star:`.repeat(stars), inline: true},
 				)
-				.setImage(image) // placeholder
+				.setImage(image)
 
 		channel.send(embedMessage)
 	}

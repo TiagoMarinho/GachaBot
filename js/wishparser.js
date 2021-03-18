@@ -8,7 +8,7 @@ module.exports = class WishParser {
 			rarity.name,
 			rarity.color,
 			rarity.stars,
-			rarity.minWeight
+			rarity.minWeightInverse
 		))
 
 		return rarities
@@ -22,6 +22,7 @@ module.exports = class WishParser {
 		const rewards = rawData.map(reward => new rewardTypes[reward.type](
 			reward.name,
 			reward.stars,
+			reward.worth,
 			reward.series,
 			reward.image
 		))

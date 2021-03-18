@@ -1,5 +1,6 @@
-class Inventory {
-	constructor () {
+module.exports = class Inventory {
+	constructor (owner) {
+		this.owner = owner
 		this.items = []
 		this.characters = []
 		this.gold = 0
@@ -9,7 +10,7 @@ class Inventory {
 	}
 	addReward (...rewards) {
 		for (const reward of rewards) {
-			switch (typeof reward) {
+			switch (reward.constructor.name) {
 				case `Character`:
 					this.characters.push(reward)
 					break;
@@ -17,6 +18,7 @@ class Inventory {
 					this.items.push(reward)
 					break;
 			}
+			console.log(`${reward.constructor.name} "${reward.name}" was added to ${this.owner.name}'s inventory`)
 		}
 	}
 }

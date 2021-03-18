@@ -17,7 +17,7 @@ module.exports = class Gacha {
 	}
 	getPullRarity (luck) {
 		for (const rarity of this.rarities) {
-			if (luck >= rarity.minWeight) {
+			if (luck >= 1 - rarity.minWeightInverse) {
 				return rarity
 			}
 		}

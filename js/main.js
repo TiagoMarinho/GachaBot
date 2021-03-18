@@ -3,12 +3,14 @@ const path = require('path');
 const Discord = require('discord.js')
 const Gacha = require('./gacha.js')
 const WishParser = require('./wishparser.js')
+const UserManager = require('./usermanager.js')
+const User = require('./user.js')
 
 module.exports = class Main {
 	constructor (config) {
 		this.config = config
 		this.client = new Discord.Client()
-		this.users = []
+		this.userManager = new UserManager()
 		this.gacha = new Gacha()
 	}
 	run () {
@@ -16,12 +18,13 @@ module.exports = class Main {
 		this.buildWishLists(`./rarities.json`, `./rewards.json`)
 
 		this.client.login(this.config.token)
+		console.log(`Logging in...`)
 
-		this.client.once("ready", _ => {
+		this.client.once(`ready`, _ => {
 			commandsByName = this.getCommandsFromFiles()
-			console.log("Ready!")
+			console.log(`Ready!`)
 		})
-		this.client.on("message", message => {
+		this.client.on(`message`, message => {
 			this.respondToCommands(message, commandsByName)
 		})
 	}
@@ -38,12 +41,13 @@ module.exports = class Main {
 		const commandFiles = fs.readdirSync(path.resolve(__dirname, 'commands')).filter(file => file.endsWith('.js'))
 		for (const file of commandFiles) {
 			const Command = require(`./commands/${file}`)
-			commandsByName[Command.name] = new Command(this.gacha)
+			commandsByName[Command.name] = new Command(this.gacha, this.userManager)
 		}
 		return commandsByName
 	}
 	respondToCommands (message, commandsByName) {
 		const prefix = this.config.prefix
+
 		if (!message.content.startsWith(prefix) || message.author.bot) 
 			return
 

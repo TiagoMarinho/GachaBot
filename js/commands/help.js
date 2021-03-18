@@ -24,7 +24,7 @@ module.exports = class Help {
 			if (commandsByName.hasOwnProperty(name)) {
 				const command = commandsByName[name]
 				embedMessage.addFields(
-					{ name: config.prefix + command.name, value: command.description, inline: false },
+					{name: config.prefix + command.name, value: command.description, inline: false},
 				)
 			}
 		}
