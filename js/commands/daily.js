@@ -8,8 +8,8 @@ module.exports = class Daily {
 	static description = `Gives a random gold reward`
 	constructor () {
 	}
-	execute (message) {
-		const user = message.author,
+	execute (message, args, user) {
+		const discordjsUser = message.author,
 			channel = message.channel,
 			seedMin = 0.25,
 			seedMax = 1,
@@ -23,7 +23,9 @@ module.exports = class Daily {
 			rarity = rarities[rarityIndex],
 			emojiMessage = `${rarity.emoji} `.repeat(rarity.stars)
 
-		console.log(`${user.username} got $${reward} from the daily reward!`)
+		user.inventory.gold += reward
+
+		console.log(`${discordjsUser.username} got $${reward} from the daily reward!`)
 
 		const embedMessage = new Discord.MessageEmbed()
 				.setColor(rarity.color)

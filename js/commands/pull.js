@@ -1,17 +1,19 @@
 const Utils = require(`../utils.js`)
 const User = require(`../user.js`)
 const Gacha = require(`../gacha.js`)
+const Command = require(`../command.js`)
 const Discord = require('discord.js')
 const config = require(`../../config.json`)
 
-module.exports = class Pull {
+module.exports = class Pull extends Command {
 	static name = `pull`
 	static description = `Pulls a random item or character from the pool`
 	constructor (gacha, userManager) {
+		super()
 		this.gacha = gacha
 		this.userManager = userManager
 	}
-	execute (message, args) { // don't do gacha logic inside of here, this is just for composing the final message!
+	execute (message, args, user) { // don't do gacha logic inside of here, this is just for composing the final message!
 		const discordjsUser = message.author,
 			channel = message.channel
 
@@ -32,12 +34,6 @@ module.exports = class Pull {
 		console.log(`${discordjsUser.username} pulled a ${rarity.stars}-star item!`)
 
 		/* just for testing, this doesn't belong here */
-		let user = this.userManager.getUser(message.author.id) 
-		if (typeof user === `undefined`) {
-			user = new User(message.author.username, message.author.id)
-			this.userManager.addChild(user)
-			console.log(`Created user "${user.name}"`)
-		}
 		user.inventory.addReward(reward)
 		/* end of test code */
 

@@ -41,7 +41,7 @@ module.exports = class Main {
 		const commandFiles = fs.readdirSync(path.resolve(__dirname, 'commands')).filter(file => file.endsWith('.js'))
 		for (const file of commandFiles) {
 			const Command = require(`./commands/${file}`)
-			commandsByName[Command.name] = new Command(this.gacha, this.userManager)
+			commandsByName[Command.name] = new Command(this.gacha)
 		}
 		return commandsByName
 	}
@@ -51,14 +51,21 @@ module.exports = class Main {
 		if (!message.content.startsWith(prefix) || message.author.bot) 
 			return
 
-		const args = message.content.slice(prefix.length).trim().split(/ +/)
-		const command = args.shift().toLowerCase()
-
 		if (typeof commandsByName[command] === `undefined`) 
 			return
 
+		const args = message.content.slice(prefix.length).trim().split(/ +/),
+			command = args.shift().toLowerCase()
+
+		let user = this.userManager.getUser(message.author.id) 
+		if (typeof user === `undefined`) {
+			user = new User(message.author.username, message.author.id)
+			this.userManager.addChild(user)
+			console.log(`Created user "${user.name}"`)
+		}
+
 		try {
-			commandsByName[command].execute(message, args)
+			commandsByName[command].execute(message, args, user)
 		} catch (error) {
 			console.error(error)
 			message.reply('there was an error trying to execute that command!')
