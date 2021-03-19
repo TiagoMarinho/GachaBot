@@ -4,6 +4,7 @@ module.exports = class Inventory {
 		this.items = []
 		this.characters = []
 		this.gold = 0
+		this.wishes = []
 	}
 	getAllRewards () {
 		return [...this.items, ...this.characters]
