@@ -25,7 +25,7 @@ module.exports = class Main {
 			console.log(`Ready!`)
 		})
 		this.client.on(`message`, message => {
-			this.respondToCommands(message, commandsByName)
+			this.commandHandler(message, commandsByName)
 		})
 	}
 	buildWishLists (raritiesFile, rewardsFile) { // unsure if this belongs here
@@ -37,25 +37,30 @@ module.exports = class Main {
 		this.gacha.rewards = parser.mapRewards(rewardsRawData)
 	}
 	getCommandsFromFiles () {
-		let commandsByName = {}
-		const commandFiles = fs.readdirSync(path.resolve(__dirname, 'commands')).filter(file => file.endsWith('.js'))
-		for (const file of commandFiles) {
-			const Command = require(`./commands/${file}`)
-			commandsByName[Command.name] = new Command(this.gacha)
+		const commandsByName = {}
+		const commandFolders = fs.readdirSync(path.resolve(__dirname, `commands`))
+		for (const folder of commandFolders) {
+			const commandFolderPath = `${path.resolve(__dirname, `commands`)}\\${folder}`
+			const commandFiles = fs.readdirSync(commandFolderPath).filter(file => file.endsWith(`.js`))
+			for (const file of commandFiles) {
+				console.log(`Command loaded: ${file}`)
+				const Command = require(`${commandFolderPath}\\${file}`)
+				commandsByName[Command.name] = new Command(this.gacha)
+			}
 		}
 		return commandsByName
 	}
-	respondToCommands (message, commandsByName) {
+	commandHandler (message, commandsByName) {
 		const prefix = this.config.prefix
 
 		if (!message.content.startsWith(prefix) || message.author.bot) 
 			return
 
-		if (typeof commandsByName[command] === `undefined`) 
-			return
-
 		const args = message.content.slice(prefix.length).trim().split(/ +/),
 			command = args.shift().toLowerCase()
+
+		if (typeof commandsByName[command] === `undefined`) 
+			return
 
 		let user = this.userManager.getUser(message.author.id) 
 		if (typeof user === `undefined`) {

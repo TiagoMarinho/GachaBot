@@ -1,7 +1,7 @@
-const Utils = require(`../utils.js`)
+const Utils = require(`../../utils.js`)
 const fs = require('fs')
 const path = require('path');
-const config = require(`../../config.json`)
+const config = require(`../../../config.json`)
 const Discord = require('discord.js')
 
 module.exports = class Help {

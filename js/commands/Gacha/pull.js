@@ -1,19 +1,18 @@
-const Utils = require(`../utils.js`)
-const User = require(`../user.js`)
-const Gacha = require(`../gacha.js`)
-const Command = require(`../command.js`)
+const Utils = require(`../../utils.js`)
+const User = require(`../../user.js`)
+const Gacha = require(`../../gacha.js`)
+const Command = require(`../../command.js`)
 const Discord = require('discord.js')
-const config = require(`../../config.json`)
+const config = require(`../../../config.json`)
 
 module.exports = class Pull extends Command {
 	static name = `pull`
 	static description = `Pulls a random item or character from the pool`
-	constructor (gacha, userManager) {
+	static gacha = true
+	constructor () {
 		super()
-		this.gacha = gacha
-		this.userManager = userManager
 	}
-	execute (message, args, user) { // don't do gacha logic inside of here, this is just for composing the final message!
+	execute (message, args, user, gacha) { // don't do gacha logic inside of here, this is just for composing the final message!
 		const discordjsUser = message.author,
 			channel = message.channel
 
@@ -23,7 +22,7 @@ module.exports = class Pull extends Command {
 		else if (typeof args[0] !== `undefined` && !config.debug)
 			return message.reply("using forced luck with debug mode disabled is not allowed")
 
-		const [reward, rarity, debug] = this.gacha.pull(forcedLuck),
+		const [reward, rarity, debug] = gacha.pull(forcedLuck),
 			stars = rarity.stars,
 			type = reward.constructor.name,
 			image = reward.image || `https://i.imgur.com/fndBsb9.png`,

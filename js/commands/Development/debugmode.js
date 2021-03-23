@@ -1,7 +1,7 @@
-const Utils = require(`../utils.js`)
-const rarities = require(`../rarities.json`)
+const Utils = require(`../../utils.js`)
+const rarities = require(`../../rarities.json`)
 const Discord = require('discord.js')
-const config = require(`../../config.json`)
+const config = require(`../../../config.json`)
 
 module.exports = class DebugMode {
 	static name = `debugmode`
