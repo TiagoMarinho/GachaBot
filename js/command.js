@@ -1,8 +1,13 @@
 module.exports = class Command {
-	static name = ``
-	static description = ``
-	static gacha = false
-	execute () {
+	name = ``
+	description = ``
+	aliases = []
+	constructor () {
+		this.args = {
+			message: true
+		}
+	}
+	execute (message) {
 
 	}
 }

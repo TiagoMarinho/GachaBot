@@ -1,76 +1,58 @@
-const fs = require('fs')
-const path = require('path');
-const Discord = require('discord.js')
-const Gacha = require('./gacha.js')
-const WishParser = require('./wishparser.js')
-const UserManager = require('./usermanager.js')
-const User = require('./user.js')
+const config = require(`../config.json`),
+	Client = require(`./client.js`),
+	fs = require(`fs`),
+	path = require(`path`)
 
 module.exports = class Main {
-	constructor (config) {
+	constructor () {
+		this.client = new Client()
 		this.config = config
-		this.client = new Discord.Client()
-		this.userManager = new UserManager()
-		this.gacha = new Gacha()
+		this.commands = this.getCommandsFromFiles()
 	}
 	run () {
-		let commandsByName = {}
-		this.buildWishLists(`./rarities.json`, `./rewards.json`)
-
 		this.client.login(this.config.token)
 		console.log(`Logging in...`)
 
-		this.client.once(`ready`, _ => {
-			commandsByName = this.getCommandsFromFiles()
-			console.log(`Ready!`)
+		this.client.addEventListener(`ready`, _ => {
+			console.log("Logged in!")
 		})
-		this.client.on(`message`, message => {
-			this.commandHandler(message, commandsByName)
-		})
-	}
-	buildWishLists (raritiesFile, rewardsFile) { // unsure if this belongs here
-		const parser = new WishParser(),
-			raritiesRawData = require(raritiesFile),
-			rewardsRawData = require(rewardsFile)
 
-		this.gacha.rarities = parser.mapRarities(raritiesRawData).reverse()
-		this.gacha.rewards = parser.mapRewards(rewardsRawData)
+		this.client.addEventListener(`message`, message => {
+			this.commandHandler(message)
+		})
 	}
 	getCommandsFromFiles () {
-		const commandsByName = {}
-		const commandFolders = fs.readdirSync(path.resolve(__dirname, `commands`))
+		const commands = []
+
+		const commandFolders = fs.readdirSync(`./js/commands`)
 		for (const folder of commandFolders) {
-			const commandFolderPath = `${path.resolve(__dirname, `commands`)}\\${folder}`
-			const commandFiles = fs.readdirSync(commandFolderPath).filter(file => file.endsWith(`.js`))
+			const commandFiles = fs.readdirSync(`./js/commands/${folder}`)
 			for (const file of commandFiles) {
-				console.log(`Command loaded: ${file}`)
-				const Command = require(`${commandFolderPath}\\${file}`)
-				commandsByName[Command.name] = new Command(this.gacha)
+				const Command = require(`./commands/${folder}/${file}`)
+				commands.push(new Command())
 			}
 		}
-		return commandsByName
+		return commands
 	}
-	commandHandler (message, commandsByName) {
+	commandHandler (message) {
 		const prefix = this.config.prefix
 
 		if (!message.content.startsWith(prefix) || message.author.bot) 
 			return
 
 		const args = message.content.slice(prefix.length).trim().split(/ +/),
-			command = args.shift().toLowerCase()
+			commandName = args.shift().toLowerCase()
 
-		if (typeof commandsByName[command] === `undefined`) 
+		const command = this.commands.find(cmd => cmd.name === commandName)
+			|| this.commands.find(cmd => cmd.aliases.includes(commandName))
+
+			console.log(command.aliases)
+
+		if (typeof command === `undefined`) 
 			return
 
-		let user = this.userManager.getUser(message.author.id) 
-		if (typeof user === `undefined`) {
-			user = new User(message.author.username, message.author.id)
-			this.userManager.addChild(user)
-			console.log(`Created user "${user.name}"`)
-		}
-
 		try {
-			commandsByName[command].execute(message, args, user)
+			command.execute(message, args)
 		} catch (error) {
 			console.error(error)
 			message.reply('there was an error trying to execute that command!')
