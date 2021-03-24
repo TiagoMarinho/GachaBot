@@ -2,10 +2,10 @@ module.exports = class Command {
 	name = ``
 	description = ``
 	aliases = []
-	constructor () {
-		this.args = {
-			message: true
-		}
+	expects = {
+		message: true,
+		args: true,
+		commands: false
 	}
 	execute (message) {
 

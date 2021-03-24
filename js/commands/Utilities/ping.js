@@ -5,7 +5,7 @@ module.exports = class Ping extends Command {
 	constructor () {
 		super()
 	}
-	execute (message) {
+	execute (message, args) {
 		message.channel.send(`pong`)
 	}
 }

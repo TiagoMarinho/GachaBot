@@ -4,11 +4,11 @@ const config = require(`../config.json`),
 	path = require(`path`)
 
 module.exports = class Main {
-	constructor () {
-		this.client = new Client()
-		this.config = config
-		this.commands = this.getCommandsFromFiles()
-	}
+
+	client = new Client()
+	config = config
+	commands = this.getCommandsFromFiles()
+
 	run () {
 		this.client.login(this.config.token)
 		console.log(`Logging in...`)
@@ -46,13 +46,17 @@ module.exports = class Main {
 		const command = this.commands.find(cmd => cmd.name === commandName)
 			|| this.commands.find(cmd => cmd.aliases.includes(commandName))
 
-			console.log(command.aliases)
-
 		if (typeof command === `undefined`) 
 			return
 
+		const parameters = []
+
+		if (command.expects.message) parameters.push(message)
+		if (command.expects.args) parameters.push(args)
+		if (command.expects.commands) parameters.push(commands)
+
 		try {
-			command.execute(message, args)
+			command.execute(...parameters)
 		} catch (error) {
 			console.error(error)
 			message.reply('there was an error trying to execute that command!')

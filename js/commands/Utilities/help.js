@@ -8,9 +8,15 @@ const Command = require('../../command.js')
 module.exports = class Help extends Command {
 	name = `help`
 	description = `Provides instructions on how to use this bot`
+	expects = {
+		message: true,
+		args: true,
+		commands: true
+	}
 	constructor () {
 		super()
 	}
-	execute (message) {
+	execute (message, args, commands) {
+		console.log(commands)
 	}
 }
